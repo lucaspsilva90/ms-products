@@ -3,24 +3,24 @@ import { Product } from '../entities/Product';
 import { ProductNotFoundError } from '../errors/ProductNotFoundError';
 import { ProductRepository } from '../repositories/product-repository';
 
-interface GetProductByIdInput {
-  id: string;
+interface GetProductBySkuInput {
+  sku: string;
 }
 
-interface GetProductByIdOutput {
+interface GetProductBySkuOutput {
   product: Product;
 }
 
 @Injectable()
-export class GetProductByIdUseCase {
+export class GetProductBySkuUseCase {
   constructor(private productRepository: ProductRepository) {}
-  async execute({ id }: GetProductByIdInput): Promise<GetProductByIdOutput> {
-    const product = await this.productRepository.findById(id);
+
+  async execute({ sku }: GetProductBySkuInput): Promise<GetProductBySkuOutput> {
+    const product = await this.productRepository.findBySku(sku);
 
     if (!product) {
       throw new ProductNotFoundError({
         resourceType: 'Product',
-        resourceId: id,
       });
     }
 

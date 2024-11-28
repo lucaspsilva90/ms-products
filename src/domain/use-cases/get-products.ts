@@ -1,34 +1,40 @@
+import { Injectable } from '@nestjs/common';
 import { Product } from '../entities/Product';
 import { ProductRepository } from '../repositories/product-repository';
+import { Operation } from '../enums/operation';
 
 interface GetProductsInput {
   pageNumber: number;
-  limit: number;
+  pageSize: number;
   filters: object;
+  operation: Operation;
 }
 
 interface GetProductsOutput {
   pageNumber: number;
-  limit: number;
+  pageSize: number;
   products: Product[];
 }
 
+@Injectable()
 export class GetProductsUseCase {
   constructor(private productRepository: ProductRepository) {}
 
   async execute({
     filters,
     pageNumber,
-    limit,
+    pageSize,
+    operation,
   }: GetProductsInput): Promise<GetProductsOutput> {
     const products = await this.productRepository.findMany(
       filters,
       pageNumber,
-      limit,
+      pageSize,
+      operation,
     );
 
     return {
-      limit,
+      pageSize,
       pageNumber,
       products,
     };

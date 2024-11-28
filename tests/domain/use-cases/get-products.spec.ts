@@ -5,6 +5,7 @@ import { GetProductsUseCase } from '../../../src/domain/use-cases/get-products';
 import { InMemoryProductRepository } from '../repositories/in-memory-product-repository';
 import { Tags } from '../../../src/domain/entities/value-objects/Tags';
 import { Dimension } from '../../../src/domain/entities/value-objects/Dimension';
+import { Operation } from 'src/domain/enums/operation';
 
 let getProductsUseCase: GetProductsUseCase;
 let productRepository: ProductRepository;
@@ -75,14 +76,15 @@ describe('get products', () => {
       filters: {
         name: 'Produto 1',
       },
-      limit: 10,
+      pageSize: 10,
       pageNumber: 1,
+      operation: Operation.OR,
     };
 
     const response = await getProductsUseCase.execute(payload);
 
     expect(response.pageNumber).toBe(1);
-    expect(response.limit).toBe(10);
+    expect(response.pageSize).toBe(10);
     expect(response.products).toEqual(expect.any(Array));
     expect(response.products.length).toEqual(1);
   });
@@ -92,42 +94,45 @@ describe('get products', () => {
       filters: {
         name: 'Nonexistent Product',
       },
-      limit: 10,
+      pageSize: 10,
       pageNumber: 1,
+      operation: Operation.OR,
     };
 
     const response = await getProductsUseCase.execute(payload);
 
     expect(response.pageNumber).toBe(1);
-    expect(response.limit).toBe(10);
+    expect(response.pageSize).toBe(10);
     expect(response.products).toEqual([]);
   });
 
   it('should return the correct number of products based on the limit', async () => {
     const payload = {
       filters: {},
-      limit: 5,
+      pageSize: 5,
       pageNumber: 1,
+      operation: Operation.OR,
     };
 
     const response = await getProductsUseCase.execute(payload);
 
     expect(response.pageNumber).toBe(1);
-    expect(response.limit).toBe(5);
+    expect(response.pageSize).toBe(5);
     expect(response.products.length).toBeLessThanOrEqual(5);
   });
 
   it('should return the correct page number', async () => {
     const payload = {
       filters: {},
-      limit: 10,
+      pageSize: 10,
       pageNumber: 2,
+      operation: Operation.OR,
     };
 
     const response = await getProductsUseCase.execute(payload);
 
     expect(response.pageNumber).toBe(2);
-    expect(response.limit).toBe(10);
+    expect(response.pageSize).toBe(10);
     expect(response.products).toEqual(expect.any(Array));
   });
 });

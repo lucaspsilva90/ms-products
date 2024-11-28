@@ -28,7 +28,7 @@ describe('get product by id', () => {
   });
 
   it('should be able to get a product by its ID', async () => {
-    const p = await productRepository.findByName('Produto 1');
+    const p = await productRepository.findBySku('produto-1');
     const id = p.getId().toString();
 
     const product = await getProductByIdUseCase.execute({

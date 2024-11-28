@@ -1,24 +1,26 @@
-import { ResourceNotFoundError } from '../errors/ResourceNotFoundError';
+import { Injectable } from '@nestjs/common';
+import { ProductNotFoundError } from '../errors/ProductNotFoundError';
 import { ProductRepository } from '../repositories/product-repository';
 
 interface DeleteProductUseCaseInput {
-  productId: string;
+  id: string;
 }
 
+@Injectable()
 export class DeleteProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
-  async execute({ productId }: DeleteProductUseCaseInput): Promise<void> {
-    const productExists = await this.productRepository.findById(productId);
+  async execute({ id }: DeleteProductUseCaseInput): Promise<void> {
+    const productExists = await this.productRepository.findById(id);
     if (!productExists) {
-      throw new ResourceNotFoundError({
+      throw new ProductNotFoundError({
         additionalData: {
-          resourceId: productId,
           resourceName: 'Product',
+          resourceId: id,
         },
       });
     }
 
-    await this.productRepository.deleteById(productId);
+    await this.productRepository.deleteById(id);
   }
 }

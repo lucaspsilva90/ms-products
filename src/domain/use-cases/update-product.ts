@@ -1,8 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { Product } from '../entities/Product';
 import { Dimension } from '../entities/value-objects/Dimension';
 import { Images } from '../entities/value-objects/Images';
 import { Tags } from '../entities/value-objects/Tags';
-import { ResourceNotFoundError } from '../errors/ResourceNotFoundError';
+import { ProductNotFoundError } from '../errors/ProductNotFoundError';
 import { ProductRepository } from '../repositories/product-repository';
 
 interface UpdateProductInput {
@@ -25,6 +26,7 @@ interface UpdateProductOutput {
   product: Product;
 }
 
+@Injectable()
 export class UpdateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
@@ -41,7 +43,7 @@ export class UpdateProductUseCase {
     const product = await this.productRepository.findById(id);
 
     if (!product) {
-      throw new ResourceNotFoundError({
+      throw new ProductNotFoundError({
         resourceType: 'Product',
         resourceId: id,
       });
@@ -77,7 +79,7 @@ export class UpdateProductUseCase {
       product.setIsActive(isActive);
     }
 
-    const updatedProduct = await this.productRepository.update(id, product);
+    const updatedProduct = await this.productRepository.update(product);
 
     return {
       message: 'Product updated successfully',

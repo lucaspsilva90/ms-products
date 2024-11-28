@@ -27,17 +27,17 @@ beforeEach(async () => {
 
 describe('DeleteProductUseCase', () => {
   it('should delete a product', async () => {
-    const product = await productRepository.findByName('Produto 1');
+    const product = await productRepository.findBySku('produto-1');
     await deleteProductUseCase.execute({
-      productId: product.getId().toString(),
+      id: product.getId().toString(),
     });
-    const productDeleted = await productRepository.findByName('Produto 1');
+    const productDeleted = await productRepository.findBySku('produto-1');
     expect(productDeleted).toEqual(null);
   });
   it('should throw an error when trying to delete a product that does not exist', async () => {
     await expect(
       deleteProductUseCase.execute({
-        productId: '123',
+        id: '123',
       }),
     ).rejects.toThrow('Resource not found');
   });

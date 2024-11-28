@@ -13,8 +13,10 @@ export class InMemoryProductRepository implements ProductRepository {
   }
   private products: Product[] = [];
 
-  async findByName(name: string): Promise<Product> {
-    const product = this.products.find(product => product.getName() === name);
+  async findBySku(sku: string): Promise<Product> {
+    const product = this.products.find(
+      product => product.getSku().toString() === sku,
+    );
     if (!product) {
       return null;
     }
@@ -46,13 +48,13 @@ export class InMemoryProductRepository implements ProductRepository {
     this.products.push(product);
     return product;
   }
-  async update(id: string, product: Product): Promise<Product> {
+  async update(product: Product): Promise<Product> {
     const index = this.products.findIndex(
-      item => item.getId().toString() === id,
+      item => item.getId().toString() === product.getId().toString(),
     );
 
     if (index === -1) {
-      throw new Error(`Product with ID ${id} not found`);
+      throw new Error(`Product with ID ${product.getId.toString()} not found`);
     }
 
     this.products[index] = product;

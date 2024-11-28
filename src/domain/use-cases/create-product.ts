@@ -1,9 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { Product } from '../entities/Product';
 import { Dimension, IDimension } from '../entities/value-objects/Dimension';
 import { Images } from '../entities/value-objects/Images';
 import { Tags } from '../entities/value-objects/Tags';
-import { ResourceAlreadyExistsError } from '../errors/ResourceAlreadyExistsError';
+import { ProductAlreadyExistsError } from '../errors/ProductAlreadyExistsError';
 import { ProductRepository } from '../repositories/product-repository';
+import { Sku } from '../entities/value-objects/Sku';
 
 export interface CreateProductInput {
   name: string;
@@ -20,6 +22,7 @@ export interface CreateProductOutput {
   product: Product;
 }
 
+@Injectable()
 export class CreateProductUseCase {
   constructor(private productRepository: ProductRepository) {}
 
@@ -32,10 +35,13 @@ export class CreateProductUseCase {
     isActive,
     tags,
   }: CreateProductInput): Promise<CreateProductOutput> {
-    const productAlreadyExists = await this.productRepository.findByName(name);
+    const sku = new Sku(name);
+    const productAlreadyExists = await this.productRepository.findBySku(
+      sku.toString(),
+    );
 
     if (productAlreadyExists) {
-      throw new ResourceAlreadyExistsError({
+      throw new ProductAlreadyExistsError({
         productName: name,
       });
     }

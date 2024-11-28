@@ -28,7 +28,7 @@ beforeEach(async () => {
 
 describe('update product', () => {
   it('should be able to update a product', async () => {
-    const p = await productRepository.findByName('Produto 1');
+    const p = await productRepository.findBySku('produto-1');
     const id = p.getId().toString();
 
     const product = await updateProductUseCase.execute({
@@ -46,9 +46,7 @@ describe('update product', () => {
       isActive: false,
     });
 
-    expect(product).toEqual({
-      product: expect.any(Product),
-    });
+    expect(product.product instanceof Product).toBeTruthy();
   });
 
   it('should throw an error if the product does not exist', async () => {

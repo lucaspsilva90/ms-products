@@ -1,16 +1,19 @@
-import { Body, Param, Patch } from '@nestjs/common';
-import { UpdateProductUseCase } from 'src/domain/use-cases/update-product';
+import { Body, Controller, Param, Patch, UseFilters } from '@nestjs/common';
+import { UpdateProductUseCase } from '../../../../src/domain/use-cases/update-product';
 import {
   UpdateProductRequestDTO,
   UpdateProductResponseDTO,
-} from '../dtos/update-product-dto';
-import { ProductPresenter } from 'src/infra/presenters/product-presenter';
+} from '../dtos/update-product.dto';
+import { ProductPresenter } from '../presenters/product-presenter';
+import { DomainExceptionFilter } from '../filters/domain-exception.filter';
 
+@Controller('')
 export class UpdateProductController {
   constructor(private readonly updateProductUseCase: UpdateProductUseCase) {}
 
   @Patch('/products/:id')
-  async updateProduct(
+  @UseFilters(DomainExceptionFilter)
+  async handle(
     @Param('id') id: string,
     @Body() payload: UpdateProductRequestDTO,
   ): Promise<UpdateProductResponseDTO> {

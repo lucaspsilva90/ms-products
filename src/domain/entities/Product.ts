@@ -2,9 +2,12 @@ import { Dimension } from './value-objects/Dimension';
 import { Tags } from './value-objects/Tags';
 import { Entity } from '../../../src/core/entities/Entity';
 import { Images } from './value-objects/Images';
+import { UniqueEntityID } from 'src/core/entities/Unique-entity-id';
+import { Sku } from './value-objects/Sku';
 
 interface ProductProps {
   name: string;
+  sku?: Sku;
   description: string;
   price: number;
   stockId?: string;
@@ -15,26 +18,17 @@ interface ProductProps {
 }
 
 export class Product extends Entity<ProductProps> {
-  static create({
-    name,
-    description,
-    price,
-    stockId,
-    images,
-    dimensions,
-    isActive,
-    tags,
-  }: ProductProps): Product {
-    return new Product({
-      name,
-      description,
-      price,
-      stockId,
-      images,
-      dimensions,
-      isActive,
-      tags,
-    });
+  static create(props: ProductProps, id?: UniqueEntityID): Product {
+    const product = new Product(
+      {
+        ...props,
+      },
+      id,
+    );
+
+    product.setSku(new Sku(props.name));
+
+    return product;
   }
 
   getName(): string {
@@ -93,5 +87,13 @@ export class Product extends Entity<ProductProps> {
 
   setTags(tags: Tags): void {
     this.props.tags = tags;
+  }
+
+  getSku(): Sku {
+    return this.props.sku;
+  }
+
+  setSku(sku: Sku): void {
+    this.props.sku = sku;
   }
 }
