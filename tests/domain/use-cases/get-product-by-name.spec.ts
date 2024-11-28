@@ -40,6 +40,6 @@ describe('get product by name', () => {
       getProductBySkuUseCase.execute({
         sku: 'produto-2',
       }),
-    ).rejects.toThrow('Resource not found');
+    ).rejects.toThrow('Product not found');
   });
 });

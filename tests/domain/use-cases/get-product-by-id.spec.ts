@@ -45,6 +45,6 @@ describe('get product by id', () => {
       getProductByIdUseCase.execute({
         id: randomUUID(),
       }),
-    ).rejects.toThrow('Resource not found');
+    ).rejects.toThrow('Product not found');
   });
 });

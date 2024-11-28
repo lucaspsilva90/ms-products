@@ -39,6 +39,6 @@ describe('DeleteProductUseCase', () => {
       deleteProductUseCase.execute({
         id: '123',
       }),
-    ).rejects.toThrow('Resource not found');
+    ).rejects.toThrow('Product not found');
   });
 });

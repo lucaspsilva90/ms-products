@@ -65,6 +65,6 @@ describe('update product', () => {
         },
         isActive: false,
       }),
-    ).rejects.toThrow('Resource not found');
+    ).rejects.toThrow('Product not found');
   });
 });

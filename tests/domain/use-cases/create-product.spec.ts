@@ -49,6 +49,6 @@ describe('tests for create product use case', () => {
 
     expect(
       async () => await createProductUseCase.execute(payload),
-    ).rejects.toThrow('Resource Already Exists');
+    ).rejects.toThrow('Product Already Exists');
   });
 });

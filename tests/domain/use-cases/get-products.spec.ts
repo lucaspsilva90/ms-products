@@ -5,7 +5,7 @@ import { GetProductsUseCase } from '../../../src/domain/use-cases/get-products';
 import { InMemoryProductRepository } from '../repositories/in-memory-product-repository';
 import { Tags } from '../../../src/domain/entities/value-objects/Tags';
 import { Dimension } from '../../../src/domain/entities/value-objects/Dimension';
-import { Operation } from 'src/domain/enums/operation';
+import { Operation } from '../../../src/domain/enums/operation';
 
 let getProductsUseCase: GetProductsUseCase;
 let productRepository: ProductRepository;
